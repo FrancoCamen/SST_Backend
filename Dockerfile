@@ -1,5 +1,5 @@
 # Build stage
-FROM maven:3.9.4-openjdk-17-slim AS build
+FROM maven:3.9.6-eclipse-temurin-17-alpine AS build
 
 WORKDIR /app
 
@@ -15,20 +15,21 @@ COPY src ./src
 # Build the application
 RUN mvn clean package -DskipTests
 
-# Runtime stage
-FROM openjdk:17-jdk-slim
+# Runtime stage (Usamos JRE para que sea más liviana)
+FROM eclipse-temurin:17-jre-alpine
 
-# Install curl for health checks
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+# Install curl for health checks (comando apk para Alpine)
+RUN apk add --no-cache curl
 
 # Create app directory
 WORKDIR /app
 
 # Copy the built JAR from the build stage
+# Se usa el comodín * para capturar la versión (ej: backend-0.0.1-SNAPSHOT.jar)
 COPY --from=build /app/target/backend-*.jar app.jar
 
-# Create non-root user for security
-RUN groupadd -r appuser && useradd -r -g appuser appuser
+# Create non-root user for security (sintaxis para Alpine)
+RUN addgroup -S appuser && adduser -S appuser -G appuser
 RUN chown -R appuser:appuser /app
 USER appuser
 
