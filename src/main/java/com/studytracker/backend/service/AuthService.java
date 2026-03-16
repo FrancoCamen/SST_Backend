@@ -3,7 +3,7 @@ package com.studytracker.backend.service;
 import com.studytracker.backend.dto.AuthRequest;
 import com.studytracker.backend.dto.AuthResponse;
 import com.studytracker.backend.dto.RegisterRequest;
-import com.studytracker.backend.model.User;
+import com.studytracker.backend.model.AppUser;
 import com.studytracker.backend.repository.UserRepository;
 import com.studytracker.backend.security.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class AuthService {
             throw new IllegalArgumentException("Email already exists");
         }
         
-        User user = new User();
+        AppUser user = new AppUser();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
@@ -47,7 +47,7 @@ public class AuthService {
                 )
         );
         
-        User user = userRepository.findByEmail(request.getEmail())
+        AppUser user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         
         String token = jwtService.generateToken(user.getEmail());

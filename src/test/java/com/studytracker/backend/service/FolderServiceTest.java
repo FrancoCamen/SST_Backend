@@ -3,7 +3,7 @@ package com.studytracker.backend.service;
 import com.studytracker.backend.dto.FolderRequest;
 import com.studytracker.backend.dto.FolderResponse;
 import com.studytracker.backend.model.Folder;
-import com.studytracker.backend.model.User;
+import com.studytracker.backend.model.AppUser;
 import com.studytracker.backend.repository.FolderRepository;
 import com.studytracker.backend.repository.SessionRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -36,7 +36,7 @@ class FolderServiceTest {
     @InjectMocks
     private FolderService folderService;
 
-    private User testUser;
+    private AppUser testUser;
 
     @Test
     @DisplayName("Should create folder successfully")
@@ -46,7 +46,7 @@ class FolderServiceTest {
         request.setName("Mathematics");
         request.setDescription("Study folder for mathematics subjects");
 
-        User user = new User();
+        AppUser user = new AppUser();
         user.setId(1L);
 
         Folder savedFolder = new Folder();
@@ -83,7 +83,7 @@ class FolderServiceTest {
     @DisplayName("Should get user folders successfully")
     void shouldGetUserFoldersSuccessfully() {
         // Given
-        User user = new User();
+        AppUser user = new AppUser();
         user.setId(1L);
 
         Folder folder1 = new Folder();
@@ -129,7 +129,7 @@ class FolderServiceTest {
     @DisplayName("Should get folder by id successfully")
     void shouldGetFolderByIdSuccessfully() {
         // Given
-        User user = new User();
+        AppUser user = new AppUser();
         user.setId(1L);
 
         Folder folder = new Folder();
@@ -162,7 +162,7 @@ class FolderServiceTest {
     @DisplayName("Should throw exception when folder not found by id")
     void shouldThrowExceptionWhenFolderNotFoundById() {
         // Given
-        User user = new User();
+        AppUser user = new AppUser();
         user.setId(1L);
 
         when(folderRepository.findByIdAndUser(1L, user)).thenReturn(Optional.empty());
@@ -179,7 +179,7 @@ class FolderServiceTest {
     @DisplayName("Should update folder successfully")
     void shouldUpdateFolderSuccessfully() {
         // Given
-        User user = new User();
+        AppUser user = new AppUser();
         user.setId(1L);
 
         FolderRequest request = new FolderRequest();
@@ -225,7 +225,7 @@ class FolderServiceTest {
     @DisplayName("Should throw exception when updating folder not found")
     void shouldThrowExceptionWhenUpdatingFolderNotFound() {
         // Given
-        User user = new User();
+        AppUser user = new AppUser();
         user.setId(1L);
 
         FolderRequest request = new FolderRequest();
@@ -247,7 +247,7 @@ class FolderServiceTest {
     @DisplayName("Should delete folder successfully")
     void shouldDeleteFolderSuccessfully() {
         // Given
-        User user = new User();
+        AppUser user = new AppUser();
         user.setId(1L);
 
         when(folderRepository.existsByIdAndUser(1L, user)).thenReturn(true);
@@ -264,7 +264,7 @@ class FolderServiceTest {
     @DisplayName("Should throw exception when deleting folder not found")
     void shouldThrowExceptionWhenDeletingFolderNotFound() {
         // Given
-        User user = new User();
+        AppUser user = new AppUser();
         user.setId(1L);
 
         when(folderRepository.existsByIdAndUser(1L, user)).thenReturn(false);
@@ -275,6 +275,6 @@ class FolderServiceTest {
                 .hasMessage("Folder not found");
         
         verify(folderRepository).existsByIdAndUser(1L, user);
-        verify(folderRepository, never()).deleteByIdAndUser(any(Long.class), any(User.class));
+        verify(folderRepository, never()).deleteByIdAndUser(any(Long.class), any(AppUser.class));
     }
 }

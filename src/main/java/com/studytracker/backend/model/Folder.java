@@ -26,7 +26,7 @@ public class Folder {
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private AppUser user;
     
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -42,7 +42,7 @@ public class Folder {
     // Constructors
     public Folder() {}
     
-    public Folder(String name, String description, User user) {
+    public Folder(String name, String description, AppUser user) {
         this.name = name;
         this.description = description;
         this.user = user;
@@ -73,11 +73,11 @@ public class Folder {
         this.description = description;
     }
     
-    public User getUser() {
+    public AppUser getUser() {
         return user;
     }
     
-    public void setUser(User user) {
+    public void setUser(AppUser user) {
         this.user = user;
     }
     

@@ -2,7 +2,7 @@ package com.studytracker.backend.controller;
 
 import com.studytracker.backend.dto.SessionRequest;
 import com.studytracker.backend.dto.SessionResponse;
-import com.studytracker.backend.model.User;
+import com.studytracker.backend.model.AppUser;
 import com.studytracker.backend.service.SessionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,14 +24,14 @@ public class SessionController {
     @PostMapping
     public ResponseEntity<SessionResponse> createSession(@Valid @RequestBody SessionRequest request, 
                                                   Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        AppUser user = (AppUser) authentication.getPrincipal();
         SessionResponse response = sessionService.createSession(request, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     
     @GetMapping
     public ResponseEntity<List<SessionResponse>> getUserSessions(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        AppUser user = (AppUser) authentication.getPrincipal();
         List<SessionResponse> sessions = sessionService.getUserSessions(user);
         return ResponseEntity.ok(sessions);
     }
@@ -39,7 +39,7 @@ public class SessionController {
     @GetMapping("/folder/{folderId}")
     public ResponseEntity<List<SessionResponse>> getSessionsByFolder(@PathVariable Long folderId, 
                                                                 Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        AppUser user = (AppUser) authentication.getPrincipal();
         List<SessionResponse> sessions = sessionService.getUserSessionsByFolder(folderId, user);
         return ResponseEntity.ok(sessions);
     }
@@ -47,7 +47,7 @@ public class SessionController {
     @GetMapping("/{id}")
     public ResponseEntity<SessionResponse> getSessionById(@PathVariable Long id, 
                                                     Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        AppUser user = (AppUser) authentication.getPrincipal();
         SessionResponse session = sessionService.getSessionById(id, user);
         return ResponseEntity.ok(session);
     }
@@ -56,7 +56,7 @@ public class SessionController {
     public ResponseEntity<SessionResponse> updateSession(@PathVariable Long id, 
                                                   @Valid @RequestBody SessionRequest request,
                                                   Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        AppUser user = (AppUser) authentication.getPrincipal();
         SessionResponse session = sessionService.updateSession(id, request, user);
         return ResponseEntity.ok(session);
     }
@@ -64,7 +64,7 @@ public class SessionController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSession(@PathVariable Long id, 
                                           Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        AppUser user = (AppUser) authentication.getPrincipal();
         sessionService.deleteSession(id, user);
         return ResponseEntity.noContent().build();
     }

@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class AppUser {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,9 +46,9 @@ public class User {
     }
     
     // Constructors
-    public User() {}
+    public AppUser() {}
     
-    public User(String name, String email, String passwordHash) {
+    public AppUser(String name, String email, String passwordHash) {
         this.name = name;
         this.email = email;
         this.passwordHash = passwordHash;

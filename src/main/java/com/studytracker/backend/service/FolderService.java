@@ -3,7 +3,7 @@ package com.studytracker.backend.service;
 import com.studytracker.backend.dto.FolderRequest;
 import com.studytracker.backend.dto.FolderResponse;
 import com.studytracker.backend.model.Folder;
-import com.studytracker.backend.model.User;
+import com.studytracker.backend.model.AppUser;
 import com.studytracker.backend.repository.FolderRepository;
 import com.studytracker.backend.repository.SessionRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class FolderService {
     private final FolderRepository folderRepository;
     private final SessionRepository sessionRepository;
     
-    public FolderResponse createFolder(FolderRequest request, User user) {
+    public FolderResponse createFolder(FolderRequest request, AppUser user) {
         Folder folder = new Folder();
         folder.setName(request.getName());
         folder.setDescription(request.getDescription());
@@ -33,7 +33,7 @@ public class FolderService {
         return mapToFolderResponse(folder);
     }
     
-    public List<FolderResponse> getUserFolders(User user) {
+    public List<FolderResponse> getUserFolders(AppUser user) {
         List<Folder> folders = folderRepository.findByUser(user);
         
         return folders.stream()
@@ -41,14 +41,14 @@ public class FolderService {
                 .collect(Collectors.toList());
     }
     
-    public FolderResponse getFolderById(Long id, User user) {
+    public FolderResponse getFolderById(Long id, AppUser user) {
         Folder folder = folderRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new RuntimeException("Folder not found"));
         
         return mapToFolderResponse(folder);
     }
     
-    public FolderResponse updateFolder(Long id, FolderRequest request, User user) {
+    public FolderResponse updateFolder(Long id, FolderRequest request, AppUser user) {
         Folder folder = folderRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new RuntimeException("Folder not found"));
         
@@ -60,7 +60,7 @@ public class FolderService {
         return mapToFolderResponse(folder);
     }
     
-    public void deleteFolder(Long id, User user) {
+    public void deleteFolder(Long id, AppUser user) {
         if (!folderRepository.existsByIdAndUser(id, user)) {
             throw new RuntimeException("Folder not found");
         }

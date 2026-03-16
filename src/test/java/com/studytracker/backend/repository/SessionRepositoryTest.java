@@ -3,7 +3,7 @@ package com.studytracker.backend.repository;
 import com.studytracker.backend.model.Folder;
 import com.studytracker.backend.model.Session;
 import com.studytracker.backend.model.Tag;
-import com.studytracker.backend.model.User;
+import com.studytracker.backend.model.AppUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ class SessionRepositoryTest {
      * Refactorizado: Ahora calcula el endTime basándose en la duración 
      * para mantener la consistencia con @PrePersist de la entidad.
      */
-    private Session createValidSession(String title, User user, Folder folder, int duration, LocalDateTime startTime) {
+    private Session createValidSession(String title, AppUser user, Folder folder, int duration, LocalDateTime startTime) {
         Session session = new Session();
         session.setTitle(title);
         session.setDescription("Description for " + title);
@@ -48,7 +48,7 @@ class SessionRepositoryTest {
     @Test
     @DisplayName("Should save and find session")
     void shouldSaveAndFindSession() {
-        User user = new User("John Doe", "john@example.com", "password123");
+        AppUser user = new AppUser("John Doe", "john@example.com", "password123");
         entityManager.persistAndFlush(user);
 
         Folder folder = new Folder("Mathematics", "Math studies", user);
@@ -72,7 +72,7 @@ class SessionRepositoryTest {
     @Test
     @DisplayName("Should find sessions by user and folder")
     void shouldFindByUserAndFolder() {
-        User user = new User("John Doe", "john@example.com", "password123");
+        AppUser user = new AppUser("John Doe", "john@example.com", "password123");
         entityManager.persistAndFlush(user);
 
         Folder folder = new Folder("Mathematics", "Math studies", user);
@@ -94,8 +94,8 @@ class SessionRepositoryTest {
     @Test
     @DisplayName("Should find session by id and user")
     void shouldFindByIdAndUser() {
-        User user1 = new User("John Doe", "john@example.com", "password123");
-        User user2 = new User("Jane Smith", "jane@example.com", "password456");
+        AppUser user1 = new AppUser("John Doe", "john@example.com", "password123");
+        AppUser user2 = new AppUser("Jane Smith", "jane@example.com", "password456");
         entityManager.persistAndFlush(user1);
         entityManager.persistAndFlush(user2);
 
@@ -115,7 +115,7 @@ class SessionRepositoryTest {
     @Test
     @DisplayName("Should calculate total minutes by user since date")
     void shouldCalculateTotalMinutesByUserSince() {
-        User user = new User("John Doe", "john@example.com", "password123");
+        AppUser user = new AppUser("John Doe", "john@example.com", "password123");
         entityManager.persistAndFlush(user);
 
         Folder folder = new Folder("Math", "Studies", user);
@@ -141,7 +141,7 @@ class SessionRepositoryTest {
     @Test
     @DisplayName("Should count sessions by user since date")
     void shouldCountSessionsByUserSince() {
-        User user = new User("John Doe", "john@example.com", "password123");
+        AppUser user = new AppUser("John Doe", "john@example.com", "password123");
         entityManager.persistAndFlush(user);
 
         Folder folder = new Folder("Math", "Studies", user);
@@ -163,7 +163,7 @@ class SessionRepositoryTest {
     @Test
     @DisplayName("Should find sessions by user and title containing")
     void shouldFindByUserAndTitleContaining() {
-        User user = new User("John Doe", "john@example.com", "password123");
+        AppUser user = new AppUser("John Doe", "john@example.com", "password123");
         entityManager.persistAndFlush(user);
 
         Folder folder = new Folder("Math", "Studies", user);
@@ -181,7 +181,7 @@ class SessionRepositoryTest {
     @Test
     @DisplayName("Should delete session by id and user")
     void shouldDeleteByIdAndUser() {
-        User user = new User("John Doe", "john@example.com", "password123");
+        AppUser user = new AppUser("John Doe", "john@example.com", "password123");
         entityManager.persistAndFlush(user);
 
         Folder folder = new Folder("Math", "Studies", user);

@@ -3,7 +3,7 @@ package com.studytracker.backend.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.studytracker.backend.dto.FolderRequest;
 import com.studytracker.backend.dto.FolderResponse;
-import com.studytracker.backend.model.User;
+import com.studytracker.backend.model.AppUser;
 import com.studytracker.backend.security.JwtService;
 import com.studytracker.backend.service.FolderService;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +54,7 @@ class FolderControllerTest {
     // Configuración manual del contexto de seguridad para usar nuestra propia clase User
     @BeforeEach
     void setUpSecurityContext() {
-        User myCustomUser = new User();
+        AppUser myCustomUser = new AppUser();
         myCustomUser.setId(1L);
         myCustomUser.setEmail("test@example.com");
         // Borramos el setPassword porque no lo necesitamos ni existe
@@ -84,7 +84,7 @@ class FolderControllerTest {
                 LocalDateTime.now()
         );
 
-        when(folderService.createFolder(any(FolderRequest.class), any(User.class)))
+        when(folderService.createFolder(any(FolderRequest.class), any(AppUser.class)))
                 .thenReturn(expectedResponse);
 
         // When & Then
@@ -110,7 +110,7 @@ class FolderControllerTest {
                 new FolderResponse(2L, "Physics", "Physics studies", 8L, 3L, LocalDateTime.now().minusDays(2), LocalDateTime.now().minusDays(25))
         );
 
-        when(folderService.getUserFolders(any(User.class)))
+        when(folderService.getUserFolders(any(AppUser.class)))
                 .thenReturn(expectedFolders);
 
         // When & Then (Los GET no necesitan CSRF)
@@ -142,7 +142,7 @@ class FolderControllerTest {
                 LocalDateTime.now().minusDays(30)
         );
 
-        when(folderService.getFolderById(eq(1L), any(User.class)))
+        when(folderService.getFolderById(eq(1L), any(AppUser.class)))
                 .thenReturn(expectedFolder);
 
         // When & Then
@@ -161,7 +161,7 @@ class FolderControllerTest {
     @DisplayName("Should delete folder successfully")
     void shouldDeleteFolderSuccessfully() throws Exception {
         // Given
-        doNothing().when(folderService).deleteFolder(eq(1L), any(User.class));
+        doNothing().when(folderService).deleteFolder(eq(1L), any(AppUser.class));
 
         // When & Then
         mockMvc.perform(delete("/api/folders/1")

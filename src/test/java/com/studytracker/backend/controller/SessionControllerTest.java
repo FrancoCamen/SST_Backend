@@ -3,7 +3,7 @@ package com.studytracker.backend.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.studytracker.backend.dto.SessionRequest;
 import com.studytracker.backend.dto.SessionResponse;
-import com.studytracker.backend.model.User;
+import com.studytracker.backend.model.AppUser;
 import com.studytracker.backend.security.JwtService;
 import com.studytracker.backend.service.SessionService;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +54,7 @@ class SessionControllerTest {
     // Configuración manual del contexto de seguridad para usar nuestra propia clase User
     @BeforeEach
     void setUpSecurityContext() {
-        com.studytracker.backend.model.User myCustomUser = new com.studytracker.backend.model.User();
+        com.studytracker.backend.model.AppUser myCustomUser = new com.studytracker.backend.model.AppUser();
         myCustomUser.setId(1L);
         myCustomUser.setEmail("test@example.com");
         // Borramos el setPassword porque no lo necesitamos ni existe
@@ -91,7 +91,7 @@ class SessionControllerTest {
                 LocalDateTime.now()
         );
 
-        when(sessionService.createSession(any(SessionRequest.class), any(User.class)))
+        when(sessionService.createSession(any(SessionRequest.class), any(AppUser.class)))
                 .thenReturn(expectedResponse);
 
         // When & Then
@@ -126,7 +126,7 @@ class SessionControllerTest {
                     1L, "Mathematics", Arrays.asList("algebra"), LocalDateTime.now().minusDays(1))
         );
 
-        when(sessionService.getUserSessionsByFolder(eq(1L), any(User.class)))
+        when(sessionService.getUserSessionsByFolder(eq(1L), any(AppUser.class)))
                 .thenReturn(expectedSessions);
 
         // When & Then (Los GET no necesitan CSRF)
@@ -148,7 +148,7 @@ class SessionControllerTest {
     @DisplayName("Should delete session successfully")
     void shouldDeleteSessionSuccessfully() throws Exception {
         // Given
-        doNothing().when(sessionService).deleteSession(eq(1L), any(User.class));
+        doNothing().when(sessionService).deleteSession(eq(1L), any(AppUser.class));
 
         // When & Then
         mockMvc.perform(delete("/api/sessions/1")
@@ -230,7 +230,7 @@ class SessionControllerTest {
                 LocalDateTime.now()
         );
 
-        when(sessionService.getSessionById(eq(1L), any(User.class)))
+        when(sessionService.getSessionById(eq(1L), any(AppUser.class)))
                 .thenReturn(expectedSession);
 
         // When & Then (Los GET no necesitan CSRF)

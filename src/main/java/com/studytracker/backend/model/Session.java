@@ -39,7 +39,7 @@ public class Session {
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private AppUser user;
     
     @ManyToMany
     @JoinTable(
@@ -70,7 +70,7 @@ public class Session {
     // Constructors
     public Session() {}
     
-    public Session(String title, String description, LocalDateTime startTime, LocalDateTime endTime, Folder folder, User user) {
+    public Session(String title, String description, LocalDateTime startTime, LocalDateTime endTime, Folder folder, AppUser user) {
         this.title = title;
         this.description = description;
         this.startTime = startTime;
@@ -139,11 +139,11 @@ public class Session {
         this.folder = folder;
     }
     
-    public User getUser() {
+    public AppUser getUser() {
         return user;
     }
     
-    public void setUser(User user) {
+    public void setUser(AppUser user) {
         this.user = user;
     }
     

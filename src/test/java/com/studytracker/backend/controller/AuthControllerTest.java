@@ -5,7 +5,11 @@ import com.studytracker.backend.dto.AuthRequest;
 import com.studytracker.backend.dto.AuthResponse;
 import com.studytracker.backend.dto.RegisterRequest;
 import com.studytracker.backend.service.AuthService;
-import com.studytracker.backend.security.JwtService; 
+
+// Importamos tus clases de seguridad para poder excluirlas
+import com.studytracker.backend.security.SecurityConfig;
+import com.studytracker.backend.security.JwtAuthenticationFilter;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,27 +18,40 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.test.context.ActiveProfiles; 
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = AuthController.class)
+// APAGAMOS LA SEGURIDAD AUTOMÁTICA Y LA PERSONALIZADA
+@WebMvcTest(
+    controllers = AuthController.class,
+    excludeAutoConfiguration = {
+        SecurityAutoConfiguration.class,
+        UserDetailsServiceAutoConfiguration.class
+    },
+    excludeFilters = @ComponentScan.Filter(
+        type = FilterType.ASSIGNABLE_TYPE,
+        classes = { SecurityConfig.class, JwtAuthenticationFilter.class }
+    )
+)
 @AutoConfigureMockMvc(addFilters = false)
-@ActiveProfiles("test") 
+@ActiveProfiles("test")
 @DisplayName("Auth Controller Tests")
 class AuthControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
+    // EL ÚNICO MOCK QUE IMPORTA AHORA (Borra todos los demás @MockBean)
     @MockBean
     private AuthService authService;
-
-    @MockBean
-    private JwtService jwtService; 
 
     @Autowired
     private ObjectMapper objectMapper;

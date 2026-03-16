@@ -1,7 +1,7 @@
 package com.studytracker.backend.repository;
 
 import com.studytracker.backend.model.Folder;
-import com.studytracker.backend.model.User;
+import com.studytracker.backend.model.AppUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ class FolderRepositoryTest {
     @DisplayName("Should save and find folder")
     void shouldSaveAndFindFolder() {
         // Given
-        User user = new User("John Doe", "john@example.com", "password123");
+        AppUser user = new AppUser("John Doe", "john@example.com", "password123");
         entityManager.persistAndFlush(user);
 
         Folder folder = new Folder("Mathematics", "Study folder for math", user);
@@ -57,8 +57,8 @@ class FolderRepositoryTest {
     @DisplayName("Should find folders by user")
     void shouldFindFoldersByUser() {
         // Given
-        User user1 = new User("John Doe", "john@example.com", "password123");
-        User user2 = new User("Jane Smith", "jane@example.com", "password456");
+        AppUser user1 = new AppUser("John Doe", "john@example.com", "password123");
+        AppUser user2 = new AppUser("Jane Smith", "jane@example.com", "password456");
         entityManager.persistAndFlush(user1);
         entityManager.persistAndFlush(user2);
 
@@ -91,8 +91,8 @@ class FolderRepositoryTest {
     @DisplayName("Should find folder by id and user")
     void shouldFindByIdAndUser() {
         // Given
-        User user1 = new User("John Doe", "john@example.com", "password123");
-        User user2 = new User("Jane Smith", "jane@example.com", "password456");
+        AppUser user1 = new AppUser("John Doe", "john@example.com", "password123");
+        AppUser user2 = new AppUser("Jane Smith", "jane@example.com", "password456");
         entityManager.persistAndFlush(user1);
         entityManager.persistAndFlush(user2);
 
@@ -123,7 +123,7 @@ class FolderRepositoryTest {
     @DisplayName("Should find folders by user and name containing")
     void shouldFindByUserAndNameContaining() {
         // Given
-        User user = new User("John Doe", "john@example.com", "password123");
+        AppUser user = new AppUser("John Doe", "john@example.com", "password123");
         entityManager.persistAndFlush(user);
 
         Folder folder1 = new Folder("Advanced Mathematics", "Advanced math topics", user);
@@ -152,8 +152,8 @@ class FolderRepositoryTest {
     @DisplayName("Should check if folder exists by id and user")
     void shouldExistsByIdAndUser() {
         // Given
-        User user1 = new User("John Doe", "john@example.com", "password123");
-        User user2 = new User("Jane Smith", "jane@example.com", "password456");
+        AppUser user1 = new AppUser("John Doe", "john@example.com", "password123");
+        AppUser user2 = new AppUser("Jane Smith", "jane@example.com", "password456");
         entityManager.persistAndFlush(user1);
         entityManager.persistAndFlush(user2);
 
@@ -175,8 +175,8 @@ class FolderRepositoryTest {
     @DisplayName("Should delete folder by id and user")
     void shouldDeleteByIdAndUser() {
         // Given
-        User user1 = new User("John Doe", "john@example.com", "password123");
-        User user2 = new User("Jane Smith", "jane@example.com", "password456");
+        AppUser user1 = new AppUser("John Doe", "john@example.com", "password123");
+        AppUser user2 = new AppUser("Jane Smith", "jane@example.com", "password456");
         entityManager.persistAndFlush(user1);
         entityManager.persistAndFlush(user2);
 
@@ -205,8 +205,8 @@ class FolderRepositoryTest {
     @DisplayName("Should find folders by user id")
     void shouldFindByUserId() {
         // Given
-        User user1 = new User("John Doe", "john@example.com", "password123");
-        User user2 = new User("Jane Smith", "jane@example.com", "password456");
+        AppUser user1 = new AppUser("John Doe", "john@example.com", "password123");
+        AppUser user2 = new AppUser("Jane Smith", "jane@example.com", "password456");
         entityManager.persistAndFlush(user1);
         entityManager.persistAndFlush(user2);
 

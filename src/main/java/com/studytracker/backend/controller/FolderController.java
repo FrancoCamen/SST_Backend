@@ -2,7 +2,7 @@ package com.studytracker.backend.controller;
 
 import com.studytracker.backend.dto.FolderRequest;
 import com.studytracker.backend.dto.FolderResponse;
-import com.studytracker.backend.model.User;
+import com.studytracker.backend.model.AppUser;
 import com.studytracker.backend.service.FolderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,14 +24,14 @@ public class FolderController {
     @PostMapping
     public ResponseEntity<FolderResponse> createFolder(@Valid @RequestBody FolderRequest request, 
                                                Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        AppUser user = (AppUser) authentication.getPrincipal();
         FolderResponse response = folderService.createFolder(request, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     
     @GetMapping
     public ResponseEntity<List<FolderResponse>> getUserFolders(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        AppUser user = (AppUser) authentication.getPrincipal();
         List<FolderResponse> folders = folderService.getUserFolders(user);
         return ResponseEntity.ok(folders);
     }
@@ -39,7 +39,7 @@ public class FolderController {
     @GetMapping("/{id}")
     public ResponseEntity<FolderResponse> getFolderById(@PathVariable Long id, 
                                                   Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        AppUser user = (AppUser) authentication.getPrincipal();
         FolderResponse folder = folderService.getFolderById(id, user);
         return ResponseEntity.ok(folder);
     }
@@ -48,7 +48,7 @@ public class FolderController {
     public ResponseEntity<FolderResponse> updateFolder(@PathVariable Long id, 
                                                   @Valid @RequestBody FolderRequest request,
                                                   Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        AppUser user = (AppUser) authentication.getPrincipal();
         FolderResponse folder = folderService.updateFolder(id, request, user);
         return ResponseEntity.ok(folder);
     }
@@ -56,7 +56,7 @@ public class FolderController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFolder(@PathVariable Long id, 
                                           Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        AppUser user = (AppUser) authentication.getPrincipal();
         folderService.deleteFolder(id, user);
         return ResponseEntity.noContent().build();
     }

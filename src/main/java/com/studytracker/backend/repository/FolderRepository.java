@@ -1,7 +1,7 @@
 package com.studytracker.backend.repository;
 
 import com.studytracker.backend.model.Folder;
-import com.studytracker.backend.model.User;
+import com.studytracker.backend.model.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,16 +13,16 @@ import java.util.Optional;
 @Repository
 public interface FolderRepository extends JpaRepository<Folder, Long> {
     
-    List<Folder> findByUser(User user);
+    List<Folder> findByUser(AppUser user);
     
     List<Folder> findByUserId(Long userId);
     
-    Optional<Folder> findByIdAndUser(Long id, User user);
+    Optional<Folder> findByIdAndUser(Long id, AppUser user);    
     
     @Query("SELECT f FROM Folder f WHERE f.user = :user AND LOWER(f.name) LIKE LOWER(CONCAT('%', :name, '%'))")
-    List<Folder> findByUserAndNameContaining(@Param("user") User user, @Param("name") String name);
+    List<Folder> findByUserAndNameContaining(@Param("user") AppUser user, @Param("name") String name);
     
-    void deleteByIdAndUser(Long id, User user);
+    void deleteByIdAndUser(Long id, AppUser user);
     
-    boolean existsByIdAndUser(Long id, User user);
+    boolean existsByIdAndUser(Long id, AppUser user);
 }

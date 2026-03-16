@@ -5,7 +5,7 @@ import com.studytracker.backend.dto.SessionResponse;
 import com.studytracker.backend.model.Folder;
 import com.studytracker.backend.model.Session;
 import com.studytracker.backend.model.Tag;
-import com.studytracker.backend.model.User;
+import com.studytracker.backend.model.AppUser;
 import com.studytracker.backend.repository.FolderRepository;
 import com.studytracker.backend.repository.SessionRepository;
 import com.studytracker.backend.repository.TagRepository;
@@ -49,7 +49,7 @@ class SessionServiceTest {
     @DisplayName("Should create session successfully")
     void shouldCreateSessionSuccessfully() {
         // Given
-        User user = new User();
+        AppUser user = new AppUser();
         user.setId(1L);
 
         Folder folder = new Folder();
@@ -105,7 +105,7 @@ class SessionServiceTest {
     @DisplayName("Should get session by id successfully")
     void shouldGetSessionByIdSuccessfully() {
         // Given
-        User user = new User();
+        AppUser user = new AppUser();
         user.setId(1L);
 
         Folder folder = new Folder();
@@ -140,7 +140,7 @@ class SessionServiceTest {
     @DisplayName("Should create session with new tags successfully")
     void shouldCreateSessionWithNewTagsSuccessfully() {
         // Given
-        User user = new User();
+        AppUser user = new AppUser();
         user.setId(1L);
 
         SessionRequest request = new SessionRequest();
@@ -162,7 +162,7 @@ class SessionServiceTest {
         savedSession.setUser(user);
         savedSession.setTags(java.util.List.of(physicsTag, quantumTag));
 
-        when(folderRepository.findByIdAndUser(any(Long.class), any(User.class))).thenReturn(Optional.empty());
+        when(folderRepository.findByIdAndUser(any(Long.class), any(AppUser.class))).thenReturn(Optional.empty());
         when(tagRepository.findByName("physics")).thenReturn(Optional.of(physicsTag));
 when(tagRepository.findByName("quantum")).thenReturn(Optional.empty()); // Simulamos que esta es la nueva
         when(tagRepository.save(any(Tag.class))).thenReturn(quantumTag);
@@ -184,7 +184,7 @@ when(tagRepository.findByName("quantum")).thenReturn(Optional.empty()); // Simul
     @DisplayName("Should get sessions by folder successfully")
     void shouldGetSessionsByFolderSuccessfully() {
         // Given
-        User user = new User();
+        AppUser user = new AppUser();
         user.setId(1L);
 
         Folder folder = new Folder();
@@ -223,7 +223,7 @@ when(tagRepository.findByName("quantum")).thenReturn(Optional.empty()); // Simul
     @DisplayName("Should throw exception when folder not found")
     void shouldThrowExceptionWhenFolderNotFound() {
         // Given
-        User user = new User();
+        AppUser user = new AppUser();
         user.setId(1L);
 
         SessionRequest request = new SessionRequest();
@@ -241,7 +241,7 @@ when(tagRepository.findByName("quantum")).thenReturn(Optional.empty()); // Simul
     @DisplayName("Should delete session successfully")
     void shouldDeleteSessionSuccessfully() {
         // Given
-        User user = new User();
+        AppUser user = new AppUser();
         user.setId(1L);
 
         Session session = new Session();
@@ -263,7 +263,7 @@ when(tagRepository.findByName("quantum")).thenReturn(Optional.empty()); // Simul
     @DisplayName("Should throw exception when deleting session not found")
     void shouldThrowExceptionWhenDeletingSessionNotFound() {
         // Given
-        User user = new User();
+        AppUser user = new AppUser();
         user.setId(1L);
 
         when(sessionRepository.existsById(1L)).thenReturn(false);
@@ -278,7 +278,7 @@ when(tagRepository.findByName("quantum")).thenReturn(Optional.empty()); // Simul
     @DisplayName("Should get user sessions successfully")
     void shouldGetUserSessionsSuccessfully() {
         // Given
-        User user = new User();
+        AppUser user = new AppUser();
         user.setId(1L);
 
         Folder f1 = new Folder();
@@ -305,7 +305,7 @@ when(tagRepository.findByName("quantum")).thenReturn(Optional.empty()); // Simul
     @DisplayName("Should throw exception when getting session by id not found")
     void shouldThrowExceptionWhenGettingSessionByIdNotFound() {
         // Given
-        User user = new User();
+        AppUser user = new AppUser();
         user.setId(1L);
 
         when(sessionRepository.findByIdAndUser(1L, user)).thenReturn(Optional.empty());

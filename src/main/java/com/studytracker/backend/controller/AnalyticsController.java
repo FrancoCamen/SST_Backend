@@ -2,7 +2,7 @@ package com.studytracker.backend.controller;
 
 import com.studytracker.backend.dto.MonthlyAnalyticsResponse;
 import com.studytracker.backend.dto.WeeklyAnalyticsResponse;
-import com.studytracker.backend.model.User;
+import com.studytracker.backend.model.AppUser;
 import com.studytracker.backend.service.AnalyticsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,28 +21,28 @@ public class AnalyticsController {
     
     @GetMapping("/weekly")
     public ResponseEntity<WeeklyAnalyticsResponse> getWeeklyAnalytics(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        AppUser user = (AppUser) authentication.getPrincipal();
         WeeklyAnalyticsResponse analytics = analyticsService.getWeeklyAnalytics(user);
         return ResponseEntity.ok(analytics);
     }
     
     @GetMapping("/monthly")
     public ResponseEntity<MonthlyAnalyticsResponse> getMonthlyAnalytics(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        AppUser user = (AppUser) authentication.getPrincipal();
         MonthlyAnalyticsResponse analytics = analyticsService.getMonthlyAnalytics(user);
         return ResponseEntity.ok(analytics);
     }
     
     @GetMapping("/by-folder")
     public ResponseEntity<Map<String, Long>> getHoursByFolder(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        AppUser user = (AppUser) authentication.getPrincipal();
         Map<String, Long> hoursByFolder = analyticsService.getHoursByFolder(user);
         return ResponseEntity.ok(hoursByFolder);
     }
     
     @GetMapping("/productivity-hours")
     public ResponseEntity<Map<Integer, Long>> getProductivityHours(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        AppUser user = (AppUser) authentication.getPrincipal();
         Map<Integer, Long> productivityHours = analyticsService.getProductivityHours(user);
         return ResponseEntity.ok(productivityHours);
     }

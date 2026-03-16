@@ -5,7 +5,7 @@ import com.studytracker.backend.dto.SessionResponse;
 import com.studytracker.backend.model.Folder;
 import com.studytracker.backend.model.Session;
 import com.studytracker.backend.model.Tag;
-import com.studytracker.backend.model.User;
+import com.studytracker.backend.model.AppUser;
 import com.studytracker.backend.repository.FolderRepository;
 import com.studytracker.backend.repository.SessionRepository;
 import com.studytracker.backend.repository.TagRepository;
@@ -28,7 +28,7 @@ public class SessionService {
     private final FolderRepository folderRepository;
     private final TagRepository tagRepository;
     
-    public SessionResponse createSession(SessionRequest request, User user) {
+    public SessionResponse createSession(SessionRequest request, AppUser user) {
         Folder folder = null;
         if (request.getFolderId() != null) {
             folder = folderRepository.findByIdAndUser(request.getFolderId(), user)
@@ -51,7 +51,7 @@ public class SessionService {
         return mapToSessionResponse(session);
     }
     
-    public List<SessionResponse> getUserSessions(User user) {
+    public List<SessionResponse> getUserSessions(AppUser user) {
         List<Session> sessions = sessionRepository.findByUser(user);
         
         return sessions.stream()
@@ -59,7 +59,7 @@ public class SessionService {
                 .collect(Collectors.toList());
     }
     
-    public List<SessionResponse> getUserSessionsByFolder(Long folderId, User user) {
+    public List<SessionResponse> getUserSessionsByFolder(Long folderId, AppUser user) {
         Folder folder = folderRepository.findByIdAndUser(folderId, user)
                 .orElseThrow(() -> new RuntimeException("Folder not found"));
         
@@ -70,14 +70,14 @@ public class SessionService {
                 .collect(Collectors.toList());
     }
     
-    public SessionResponse getSessionById(Long id, User user) {
+    public SessionResponse getSessionById(Long id, AppUser user) {
         Session session = sessionRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new RuntimeException("Session not found"));
         
         return mapToSessionResponse(session);
     }
     
-    public SessionResponse updateSession(Long id, SessionRequest request, User user) {
+    public SessionResponse updateSession(Long id, SessionRequest request, AppUser user) {
         Session session = sessionRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new RuntimeException("Session not found"));
         
@@ -101,7 +101,7 @@ public class SessionService {
         return mapToSessionResponse(session);
     }
     
-    public void deleteSession(Long id, User user) {
+    public void deleteSession(Long id, AppUser user) {
         if (!sessionRepository.existsById(id)) {
             throw new RuntimeException("Session not found");
         }

@@ -3,7 +3,7 @@ package com.studytracker.backend.service;
 import com.studytracker.backend.dto.MonthlyAnalyticsResponse;
 import com.studytracker.backend.dto.WeeklyAnalyticsResponse;
 import com.studytracker.backend.model.Session;
-import com.studytracker.backend.model.User;
+import com.studytracker.backend.model.AppUser;
 import com.studytracker.backend.repository.SessionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ public class AnalyticsService {
     
     private final SessionRepository sessionRepository;
     
-    public WeeklyAnalyticsResponse getWeeklyAnalytics(User user) {
+    public WeeklyAnalyticsResponse getWeeklyAnalytics(AppUser user) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime weekStart = now.minusWeeks(1);
         LocalDateTime weekEnd = now;
@@ -29,7 +29,7 @@ public class AnalyticsService {
         return buildWeeklyResponse(sessions, weekStart, weekEnd);
     }
     
-    public MonthlyAnalyticsResponse getMonthlyAnalytics(User user) {
+    public MonthlyAnalyticsResponse getMonthlyAnalytics(AppUser user) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime monthStart = now.minusMonths(1);
         LocalDateTime monthEnd = now;
@@ -39,7 +39,7 @@ public class AnalyticsService {
         return buildMonthlyResponse(sessions, monthStart, monthEnd);
     }
     
-    public Map<String, Long> getHoursByFolder(User user) {
+    public Map<String, Long> getHoursByFolder(AppUser user) {
         List<Session> sessions = sessionRepository.findByUser(user);
         
         return sessions.stream()
@@ -55,7 +55,7 @@ public class AnalyticsService {
                 ));
     }
     
-    public Map<Integer, Long> getProductivityHours(User user) {
+    public Map<Integer, Long> getProductivityHours(AppUser user) {
         List<Session> sessions = sessionRepository.findByUser(user);
         
         return sessions.stream()
