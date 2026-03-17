@@ -1,31 +1,25 @@
 package com.studytracker.backend.security;
 
 import com.studytracker.backend.model.AppUser;
-import com.studytracker.backend.repository.UserRepository;
+import com.studytracker.backend.repository.UserRepository; // O AppUserRepository si lo renombraste
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
     
-    private final UserRepository userRepository;
+    private final UserRepository userRepository; 
     
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        AppUser user = userRepository.findByEmail(email)
+        AppUser appUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
         
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getEmail())
-                .password(user.getPasswordHash())
-                .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")))
-                .build();
+        // Aquí envolvemos tu AppUser en el CustomUserDetails que acabamos de crear
+        return new CustomUserDetails(appUser);
     }
 }

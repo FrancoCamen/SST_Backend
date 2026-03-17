@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import com.studytracker.backend.security.CustomUserDetails;
 
 import java.util.List;
 
@@ -24,14 +25,28 @@ public class SessionController {
     @PostMapping
     public ResponseEntity<SessionResponse> createSession(@Valid @RequestBody SessionRequest request, 
                                                   Authentication authentication) {
-        AppUser user = (AppUser) authentication.getPrincipal();
+        //AppUser user = (AppUser) authentication.getPrincipal();
+        
+        // 1. Primero casteamos al CustomUserDetails (que es lo que Spring Security maneja internamente)
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        
+        // 2. Luego extraemos tu AppUser limpio desde adentro
+        AppUser user = userDetails.getUser();
+        
         SessionResponse response = sessionService.createSession(request, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     
     @GetMapping
     public ResponseEntity<List<SessionResponse>> getUserSessions(Authentication authentication) {
-        AppUser user = (AppUser) authentication.getPrincipal();
+        //AppUser user = (AppUser) authentication.getPrincipal();
+        
+        // 1. Primero casteamos al CustomUserDetails (que es lo que Spring Security maneja internamente)
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        
+        // 2. Luego extraemos tu AppUser limpio desde adentro
+        AppUser user = userDetails.getUser();
+        
         List<SessionResponse> sessions = sessionService.getUserSessions(user);
         return ResponseEntity.ok(sessions);
     }
@@ -39,7 +54,14 @@ public class SessionController {
     @GetMapping("/folder/{folderId}")
     public ResponseEntity<List<SessionResponse>> getSessionsByFolder(@PathVariable Long folderId, 
                                                                 Authentication authentication) {
-        AppUser user = (AppUser) authentication.getPrincipal();
+        //AppUser user = (AppUser) authentication.getPrincipal();
+        
+        // 1. Primero casteamos al CustomUserDetails (que es lo que Spring Security maneja internamente)
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        
+        // 2. Luego extraemos tu AppUser limpio desde adentro
+        AppUser user = userDetails.getUser();
+        
         List<SessionResponse> sessions = sessionService.getUserSessionsByFolder(folderId, user);
         return ResponseEntity.ok(sessions);
     }
@@ -47,7 +69,14 @@ public class SessionController {
     @GetMapping("/{id}")
     public ResponseEntity<SessionResponse> getSessionById(@PathVariable Long id, 
                                                     Authentication authentication) {
-        AppUser user = (AppUser) authentication.getPrincipal();
+        //AppUser user = (AppUser) authentication.getPrincipal();
+        
+        // 1. Primero casteamos al CustomUserDetails (que es lo que Spring Security maneja internamente)
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        
+        // 2. Luego extraemos tu AppUser limpio desde adentro
+        AppUser user = userDetails.getUser();
+        
         SessionResponse session = sessionService.getSessionById(id, user);
         return ResponseEntity.ok(session);
     }
@@ -56,7 +85,14 @@ public class SessionController {
     public ResponseEntity<SessionResponse> updateSession(@PathVariable Long id, 
                                                   @Valid @RequestBody SessionRequest request,
                                                   Authentication authentication) {
-        AppUser user = (AppUser) authentication.getPrincipal();
+        //AppUser user = (AppUser) authentication.getPrincipal();
+        
+        // 1. Primero casteamos al CustomUserDetails (que es lo que Spring Security maneja internamente)
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        
+        // 2. Luego extraemos tu AppUser limpio desde adentro
+        AppUser user = userDetails.getUser();
+        
         SessionResponse session = sessionService.updateSession(id, request, user);
         return ResponseEntity.ok(session);
     }
@@ -64,7 +100,14 @@ public class SessionController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSession(@PathVariable Long id, 
                                           Authentication authentication) {
-        AppUser user = (AppUser) authentication.getPrincipal();
+        //AppUser user = (AppUser) authentication.getPrincipal();
+        
+        // 1. Primero casteamos al CustomUserDetails (que es lo que Spring Security maneja internamente)
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        
+        // 2. Luego extraemos tu AppUser limpio desde adentro
+        AppUser user = userDetails.getUser();
+        
         sessionService.deleteSession(id, user);
         return ResponseEntity.noContent().build();
     }

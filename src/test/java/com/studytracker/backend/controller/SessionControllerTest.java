@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import com.studytracker.backend.security.CustomUserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -51,17 +52,18 @@ class SessionControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    // Configuración manual del contexto de seguridad para usar nuestra propia clase User
     @BeforeEach
     void setUpSecurityContext() {
-        com.studytracker.backend.model.AppUser myCustomUser = new com.studytracker.backend.model.AppUser();
+        AppUser myCustomUser = new AppUser();
         myCustomUser.setId(1L);
         myCustomUser.setEmail("test@example.com");
-        // Borramos el setPassword porque no lo necesitamos ni existe
 
-        // En lugar de pedirle las authorities al usuario, le pasamos una lista vacía
+        // Envolvemos el AppUser en CustomUserDetails
+        CustomUserDetails userDetails = new CustomUserDetails(myCustomUser);
+
+        // El principal ahora es el objeto userDetails
         UsernamePasswordAuthenticationToken authentication = 
-            new UsernamePasswordAuthenticationToken(myCustomUser, null, java.util.List.of());
+            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
