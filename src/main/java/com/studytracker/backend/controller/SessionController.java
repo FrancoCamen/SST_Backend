@@ -46,7 +46,7 @@ public class SessionController {
         // 2. Luego extraemos tu AppUser limpio desde adentro
         AppUser user = userDetails.getUser();
         
-        //List<SessionResponse> sessions = sessionService.getUserSessions(user);
+        List<SessionResponse> sessions = sessionService.getUserSessions(user);
         return ResponseEntity.ok(sessions);
         
     }

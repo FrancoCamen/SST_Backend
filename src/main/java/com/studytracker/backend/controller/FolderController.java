@@ -46,7 +46,7 @@ public class FolderController {
         // 2. Luego extraemos tu AppUser limpio desde adentro
         AppUser user = userDetails.getUser();
         
-        //List<FolderResponse> folders = folderService.getUserFolders(user);
+        List<FolderResponse> folders = folderService.getUserFolders(user);
         return ResponseEntity.ok(folders);
         
     }
