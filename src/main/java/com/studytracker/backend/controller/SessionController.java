@@ -44,10 +44,11 @@ public class SessionController {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         
         // 2. Luego extraemos tu AppUser limpio desde adentro
-        AppUser user = userDetails.getUser();
+        //AppUser user = userDetails.getUser();
         
-        List<SessionResponse> sessions = sessionService.getUserSessions(user);
-        return ResponseEntity.ok(sessions);
+        //List<SessionResponse> sessions = sessionService.getUserSessions(user);
+        //return ResponseEntity.ok(sessions);
+        return ResponseEntity.ok(List.of());
     }
     
     @GetMapping("/folder/{folderId}")
