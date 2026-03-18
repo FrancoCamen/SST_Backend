@@ -21,7 +21,8 @@ public class CorsConfig {
             "http://localhost:*",
             "https://localhost:*",
             "http://127.0.0.1:*",
-            "https://127.0.0.1:*"
+            "https://127.0.0.1:*",
+            "https://sst-frontend-black.vercel.app"
         ));
         
         // Permitir métodos HTTP comunes
