@@ -17,7 +17,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/folders")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173", ${CORS_ALLOWED_ORIGINS}})
 public class FolderController {
     
     private final FolderService folderService;
