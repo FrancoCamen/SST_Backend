@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+//@Transactional
 public class FolderService {
     
     private final FolderRepository folderRepository;
@@ -33,6 +33,7 @@ public class FolderService {
         return mapToFolderResponse(folder);
     }
     
+    @Transactional(readOnly = true)
     public List<FolderResponse> getUserFolders(AppUser user) {
         List<Folder> folders = folderRepository.findByUser(user);
         
@@ -41,6 +42,7 @@ public class FolderService {
                 .collect(Collectors.toList());
     }
     
+    @Transactional(readOnly = true)
     public FolderResponse getFolderById(Long id, AppUser user) {
         Folder folder = folderRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new RuntimeException("Folder not found"));

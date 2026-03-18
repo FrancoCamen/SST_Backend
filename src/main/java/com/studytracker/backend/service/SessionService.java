@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+//@Transactional
 public class SessionService {
     
     private final SessionRepository sessionRepository;
@@ -34,6 +34,7 @@ public class SessionService {
             folder = folderRepository.findByIdAndUser(request.getFolderId(), user)
                     .orElseThrow(() -> new RuntimeException("Folder not found"));
         }
+        
         
         Set<Tag> tags = processTags(request.getTags());
         
@@ -51,6 +52,7 @@ public class SessionService {
         return mapToSessionResponse(session);
     }
     
+    @Transactional(readOnly = true)
     public List<SessionResponse> getUserSessions(AppUser user) {
         List<Session> sessions = sessionRepository.findByUser(user);
         
@@ -59,6 +61,7 @@ public class SessionService {
                 .collect(Collectors.toList());
     }
     
+    @Transactional(readOnly = true)
     public List<SessionResponse> getUserSessionsByFolder(Long folderId, AppUser user) {
         Folder folder = folderRepository.findByIdAndUser(folderId, user)
                 .orElseThrow(() -> new RuntimeException("Folder not found"));
@@ -70,6 +73,7 @@ public class SessionService {
                 .collect(Collectors.toList());
     }
     
+    @Transactional(readOnly = true)
     public SessionResponse getSessionById(Long id, AppUser user) {
         Session session = sessionRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new RuntimeException("Session not found"));
@@ -77,6 +81,7 @@ public class SessionService {
         return mapToSessionResponse(session);
     }
     
+    @Transactional
     public SessionResponse updateSession(Long id, SessionRequest request, AppUser user) {
         Session session = sessionRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new RuntimeException("Session not found"));
