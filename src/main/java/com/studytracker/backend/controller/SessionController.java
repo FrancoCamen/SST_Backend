@@ -41,14 +41,14 @@ public class SessionController {
         //AppUser user = (AppUser) authentication.getPrincipal();
         
         // 1. Primero casteamos al CustomUserDetails (que es lo que Spring Security maneja internamente)
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        //CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         
         // 2. Luego extraemos tu AppUser limpio desde adentro
         //AppUser user = userDetails.getUser();
         
         //List<SessionResponse> sessions = sessionService.getUserSessions(user);
         //return ResponseEntity.ok(sessions);
-        return ResponseEntity.ok(List.of());
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
     
     @GetMapping("/folder/{folderId}")

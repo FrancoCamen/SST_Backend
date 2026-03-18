@@ -41,13 +41,14 @@ public class FolderController {
         //AppUser user = (AppUser) authentication.getPrincipal();
         
         // 1. Primero casteamos al CustomUserDetails (que es lo que Spring Security maneja internamente)
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        //CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         
         // 2. Luego extraemos tu AppUser limpio desde adentro
-        AppUser user = userDetails.getUser();
+        //AppUser user = userDetails.getUser();
         
-        List<FolderResponse> folders = folderService.getUserFolders(user);
-        return ResponseEntity.ok(folders);
+        //List<FolderResponse> folders = folderService.getUserFolders(user);
+        //return ResponseEntity.ok(folders);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
     
     @GetMapping("/{id}")
