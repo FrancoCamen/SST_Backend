@@ -3,11 +3,14 @@ package com.studytracker.backend.controller;
 import com.studytracker.backend.dto.AuthRequest;
 import com.studytracker.backend.dto.AuthResponse;
 import com.studytracker.backend.dto.RegisterRequest;
+import com.studytracker.backend.model.AppUser;
+import com.studytracker.backend.security.CustomUserDetails;
 import com.studytracker.backend.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -38,8 +41,31 @@ public class AuthController {
         }
     }
     
-    @GetMapping("/test")
-    public ResponseEntity<String> test() {
-        return ResponseEntity.ok("Auth endpoint is working");
+    //@GetMapping("/test")
+    //public ResponseEntity<String> test() {
+    //    return ResponseEntity.ok("Auth endpoint is working");
+    //}
+
+    @GetMapping("/test") // Puedes renombrarlo a "/me" en un futuro si prefieres
+    public ResponseEntity<AuthResponse> test(Authentication authentication) {
+        // 1. Verificamos que la petición realmente traiga un token válido
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        // 2. Extraemos el usuario exacto de la base de datos a través del contexto de Spring Security
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        AppUser user = userDetails.getUser();
+        
+        // 3. Armamos la respuesta. 
+        // Pasamos null en el token porque el frontend ya tiene el suyo guardado y no hace falta pisarlo.
+        AuthResponse response = new AuthResponse(
+            null, 
+            user.getId(), 
+            user.getName(), 
+            user.getEmail()
+        );
+        
+        return ResponseEntity.ok(response);
     }
 }

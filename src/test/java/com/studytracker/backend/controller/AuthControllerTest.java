@@ -6,7 +6,6 @@ import com.studytracker.backend.dto.AuthResponse;
 import com.studytracker.backend.dto.RegisterRequest;
 import com.studytracker.backend.service.AuthService;
 
-// Importamos tus clases de seguridad para poder excluirlas
 import com.studytracker.backend.security.SecurityConfig;
 import com.studytracker.backend.security.JwtAuthenticationFilter;
 
@@ -29,7 +28,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-// APAGAMOS LA SEGURIDAD AUTOMÁTICA Y LA PERSONALIZADA
 @WebMvcTest(
     controllers = AuthController.class,
     excludeAutoConfiguration = {
@@ -49,7 +47,6 @@ class AuthControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    // EL ÚNICO MOCK QUE IMPORTA AHORA (Borra todos los demás @MockBean)
     @MockBean
     private AuthService authService;
 
@@ -59,7 +56,6 @@ class AuthControllerTest {
     @Test
     @DisplayName("Should register a new user successfully")
     void shouldRegisterNewUserSuccessfully() throws Exception {
-        // Given
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setName("John Doe");
         registerRequest.setEmail("john@example.com");
@@ -75,13 +71,11 @@ class AuthControllerTest {
         when(authService.register(any(RegisterRequest.class)))
                 .thenReturn(expectedResponse);
 
-        // When & Then
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registerRequest)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.token").value("test-jwt-token"))
-                // CORRECCIÓN: Cambiado "$.id" a "$.userId"
                 .andExpect(jsonPath("$.userId").value(1))
                 .andExpect(jsonPath("$.name").value("John Doe"))
                 .andExpect(jsonPath("$.email").value("john@example.com"));
@@ -90,7 +84,6 @@ class AuthControllerTest {
     @Test
     @DisplayName("Should return bad request when registering with existing email")
     void shouldReturnBadRequestWhenRegisteringWithExistingEmail() throws Exception {
-        // Given
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setName("John Doe");
         registerRequest.setEmail("existing@example.com");
@@ -99,7 +92,6 @@ class AuthControllerTest {
         when(authService.register(any(RegisterRequest.class)))
                 .thenThrow(new IllegalArgumentException("Email already exists"));
 
-        // When & Then
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registerRequest)))
@@ -109,7 +101,6 @@ class AuthControllerTest {
     @Test
     @DisplayName("Should login user successfully")
     void shouldLoginUserSuccessfully() throws Exception {
-        // Given
         AuthRequest loginRequest = new AuthRequest();
         loginRequest.setEmail("john@example.com");
         loginRequest.setPassword("password123");
@@ -124,13 +115,11 @@ class AuthControllerTest {
         when(authService.login(any(AuthRequest.class)))
                 .thenReturn(expectedResponse);
 
-        // When & Then
         mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").value("test-jwt-token"))
-                // CORRECCIÓN: Cambiado "$.id" a "$.userId"
                 .andExpect(jsonPath("$.userId").value(1))
                 .andExpect(jsonPath("$.name").value("John Doe"))
                 .andExpect(jsonPath("$.email").value("john@example.com"));
@@ -139,7 +128,6 @@ class AuthControllerTest {
     @Test
     @DisplayName("Should return unauthorized when login with invalid credentials")
     void shouldReturnUnauthorizedWhenLoginWithInvalidCredentials() throws Exception {
-        // Given
         AuthRequest loginRequest = new AuthRequest();
         loginRequest.setEmail("invalid@example.com");
         loginRequest.setPassword("wrongpassword");
@@ -147,32 +135,30 @@ class AuthControllerTest {
         when(authService.login(any(AuthRequest.class)))
                 .thenThrow(new RuntimeException("Invalid credentials"));
 
-        // When & Then
         mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginRequest)))
                 .andExpect(status().isUnauthorized());
     }
 
+    // --- ESTE ES EL TEST QUE CAMBIAMOS PARA QUE FUNCIONE RÁPIDO ---
     @Test
-    @DisplayName("Should return test endpoint response")
+    @DisplayName("Should return unauthorized for test endpoint without auth")
     void shouldReturnTestEndpointResponse() throws Exception {
-        // When & Then
+        // Al estar la seguridad apagada en la configuración del test, el Authentication entra como null.
+        // Nuestro nuevo controlador maneja esto devolviendo 401 Unauthorized.
         mockMvc.perform(get("/api/auth/test"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Auth endpoint is working"));
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
     @DisplayName("Should return validation error for invalid register request")
     void shouldReturnValidationErrorForInvalidRegisterRequest() throws Exception {
-        // Given
         RegisterRequest invalidRequest = new RegisterRequest();
-        invalidRequest.setName(""); // Invalid: empty name
-        invalidRequest.setEmail("invalid-email"); // Invalid: not a valid email
-        invalidRequest.setPassword("123"); // Invalid: too short
+        invalidRequest.setName(""); 
+        invalidRequest.setEmail("invalid-email"); 
+        invalidRequest.setPassword("123"); 
 
-        // When & Then
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidRequest)))
@@ -182,12 +168,10 @@ class AuthControllerTest {
     @Test
     @DisplayName("Should return validation error for invalid login request")
     void shouldReturnValidationErrorForInvalidLoginRequest() throws Exception {
-        // Given
         AuthRequest invalidRequest = new AuthRequest();
-        invalidRequest.setEmail(""); // Invalid: empty email
-        invalidRequest.setPassword(""); // Invalid: empty password
+        invalidRequest.setEmail(""); 
+        invalidRequest.setPassword(""); 
 
-        // When & Then
         mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidRequest)))
